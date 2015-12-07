@@ -49,11 +49,15 @@ public class BeverageListFragment extends Fragment {
         updateUI();
     }
 
+    public void runUpdate(){
+        updateUI();
+    }
+
     //Method to setup the view with an adapter if it doesn't already have one.
     //and update changes if it does.
     private void updateUI() {
         //Get the collection of data.
-        BeverageCollection beverageCollection = BeverageCollection.get(getActivity());
+        BeverageCollection beverageCollection = BeverageCollection.get();
         //Fetch the list of data from the collection
         List<Beverage> beverages = beverageCollection.getBeverages();
 

@@ -115,4 +115,18 @@
 
         </LinearLayout>
 
+    <Button
+        android:id="@+id/select_contact_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_contact_button_title"
+        android:enabled="true"/>
+
+    <Button
+        android:id="@+id/send_beverage_details_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_beverage_details_title"
+        android:enabled="false"/>
+
 </LinearLayout>

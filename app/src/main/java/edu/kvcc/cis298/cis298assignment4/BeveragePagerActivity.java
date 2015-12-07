@@ -43,7 +43,7 @@ public class BeveragePagerActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.activity_beverage_pager_view_pager);
 
         //Get the beverages from the beverage collection
-        mBeverages = BeverageCollection.get(this).getBeverages();
+        mBeverages = BeverageCollection.get().getBeverages();
 
         //Create a fragment manager that the view pager adapter needs to operate
         FragmentManager fragmentManager = getSupportFragmentManager();

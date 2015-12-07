@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.widget.Toast;
 
 /**
  * Created by David Barnes on 11/3/2015.
@@ -33,6 +34,27 @@ public abstract class SingleFragmentActivity extends FragmentActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit(); //must commit the transaction to make it complete
         }
+        retrieveBeveragesFromHTTP();
+    }
+
+    private void retrieveBeveragesFromHTTP(){
+        ServerRequests serverRequests = new ServerRequests(this);
+        serverRequests.fetchBeveragesAsyncTask(new BeverageCallback() {
+            @Override
+            public void beverageCallback(boolean status) {
+                if (status) {
+                    FragmentManager manager = getSupportFragmentManager();
+                    BeverageListFragment f2 = (BeverageListFragment) manager.findFragmentById(R.id.fragment_container);
+                    f2.runUpdate();
+                } else {
+                    toastError();
+                }
+            }
+        });
+    }
+
+    private void toastError() {
+        Toast.makeText(this, "Error Loading Beverages From Web", Toast.LENGTH_SHORT).show();
     }
 
     //Define a abstract method that must be overridden in child classes to return a fragment to use.
