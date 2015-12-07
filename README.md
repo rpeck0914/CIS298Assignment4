@@ -72,10 +72,11 @@ The application must do all of the above work to get the extra credit. In order 
 
 http://stackoverflow.com/questions/10117049/get-only-email-address-from-contact-list-android
 http://code.tutsplus.com/tutorials/android-essentials-using-the-contact-picker--mobile-2017
+http://developer.android.com/guide/components/intents-common.html
 
 ## Known Problems, Issues, And/Or Errors in the Program
 
-
+		No known problems with the program.
 
 # Original Assignment README
 
