@@ -49,6 +49,7 @@ public class BeverageListFragment extends Fragment {
         updateUI();
     }
 
+    //Public method to run the classes updateUI private method.
     public void runUpdate(){
         updateUI();
     }

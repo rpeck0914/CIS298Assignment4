@@ -28,6 +28,7 @@ public class BeverageFragment extends Fragment implements View.OnClickListener {
     //String key that will be used to send data between fragments
     private static final String ARG_BEVERAGE_ID = "crime_id";
 
+    //Static variable for opening the contact picker.
     private static final int CONTACT_PICKER_RESULT = 1001;
 
     //private class level vars for the model properties
@@ -186,30 +187,38 @@ public class BeverageFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //Private method to launch the contact picker.
     private void selectContact() {
         doLaunchContactPicker();
     }
 
+    //Creates a new intent and starts the contact picker activity.
     private void doLaunchContactPicker() {
         Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
         startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);
     }
 
+    //Composes the data to sent over for the email.
     private void sendDetails() {
         String[] addresses = new String[1];
         addresses[0] = mSelectedEmail;
+        //Calls compose email method to send over the data to be put in the email.
         composeEmail(addresses, mEmailSubject, composeEmailBody());
+        //Enables the button to send the email.
         mSendDetailsButton.setEnabled(false);
     }
 
+    //Method to write out the body of the email to be sent.
     private String composeEmailBody() {
         String isActiveString;
+        //Checks to see if the item is active or not and sets appropriate string.
         if(mBeverage.isActive()) {
             isActiveString = "Currently Active";
         } else {
             isActiveString = "Currently InActive";
         }
 
+        //Writes the body and save it all as one string to send over to the email activity.
         String body = mSelectedName + ",\n\n" +
                      "Please Review the Following Beverage.\n\n" +
                       mBeverage.getId() + "\n" +
@@ -221,11 +230,16 @@ public class BeverageFragment extends Fragment implements View.OnClickListener {
         return body;
     }
 
+    //Private method to create a new intent to open the email app and sends over the subject and body
+    //of the email.
     private void composeEmail(String[] address, String subject, String body) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("*/*");
+        //Sets the email address to send the email to.
         intent.putExtra(Intent.EXTRA_EMAIL, address);
+        //Sets the subject of the email.
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        //Sets the body of the email.
         intent.putExtra(Intent.EXTRA_TEXT, body);
         if(intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
@@ -233,15 +247,21 @@ public class BeverageFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    //onActivityResult is called once the user selects a contact to send an email to.
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //Checks to make sure the resultCode is OK.
         if(resultCode == Activity.RESULT_OK) {
+            //Switch statement to see if the request code was from the contact picker.
             switch (requestCode) {
                 case CONTACT_PICKER_RESULT:
+                    //Creates a cursor to go through the contact database on the user's phone
                     Cursor cursor = null;
+                    // Creates strings to hold the data that will be pulled from the contacts database.
                     String email = "";
                     String contactName = "";
                     try {
+                        //Gets the data and saves it in a Uri variable.
                         Uri result = data.getData();
 
                         // get the contact id from the Uri
@@ -252,26 +272,33 @@ public class BeverageFragment extends Fragment implements View.OnClickListener {
                                 null, Email.CONTACT_ID + "=?", new String[] { id },
                                 null);
 
+                        //Stores the id for the email and name.
                         int emailIdx = cursor.getColumnIndex(Email.DATA);
                         int nameIdx = cursor.getColumnIndex(Contacts.DISPLAY_NAME);
 
-                        // let's just get the first email
+                        //Sets the cursor to the first set of data.
                         if (cursor.moveToFirst()) {
+                            //grabs the strings at the index we set for our selected contact.
                             email = cursor.getString(emailIdx);
                             contactName = cursor.getString(nameIdx);
                         }
                     } catch (Exception e) {
+                        //Catches any exceptions that may occur.
                         e.printStackTrace();
                     } finally {
                         if (cursor != null) {
+                            //Closes the cursor.
                             cursor.close();
                         }
                         if(email.length() > 1) {
+                            //Sets the selected contacts to class level variables to be used in setting up the email.
                             mSelectedEmail = email;
                             mSelectedName = contactName;
+                            //enables the SendDetailsButton.
                             mSendDetailsButton.setEnabled(true);
                         }
                         if (email.length() == 0) {
+                            //If the selected contact didn't have an email a toast will display saying there was no email.
                             Toast.makeText(getActivity(), "No email found for contact.", Toast.LENGTH_LONG).show();
                         }
                     }
